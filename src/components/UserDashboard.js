@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.css'
+import '../index.css'
 
 const UserDashboard = ({ user }) => {return <div>
   <p><img className="avatar"src={user.avatar}/></p>

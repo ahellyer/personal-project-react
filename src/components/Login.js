@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import githubEvents from './events.js';
+// import githubEvents from './events.js';
 
 class Login extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class Login extends Component {
   handleChange = (e) => {
     const input = e.target.value
     this.setState({ input })
-    console.log(this.state.input)
+
   }
   //on submit send state to app.js
    handleSubmit = (e) => {
@@ -23,8 +23,7 @@ class Login extends Component {
     console.log(this.state.input)
     //call function that makes API call
     this.getData(this.state.input);
-    //checkif user exists?
-    //dispatch all data to the store?
+
   }
 
   handleErrors = (response) => {
@@ -38,7 +37,7 @@ class Login extends Component {
 
   //function to make fetch
   getData = (username) => {
-    const url = `https://api.github.com/users/${username}/events?access_token=a7b8080e5076d4834dff9c7f03bdce00d0ad0f94`;
+    const url = `https://api.github.com/users/${username}/events?access_token=17e4c766aa5c380d6e9a23faaaa0e3e26a7ba949`;
     fetch(url).then(this.handleErrors)
       .then(function(response) {
       return response.json();

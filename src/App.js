@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import githubEvents from './events';
-import Login from './Login'
-import UserProfile from './UserProfile';
-import UserDashboard from './UserDashboard';
+import Login from './components/Login'
+import UserProfile from './components/UserProfile';
+import UserDashboard from './components/UserDashboard';
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class App extends Component {
   updateData = ( data, name ) => {
     console.log('update data was called!')
     this.setState({ [name]: data})
-    //update showForm to false?
+
   }
 
   toggleForm = () => {
