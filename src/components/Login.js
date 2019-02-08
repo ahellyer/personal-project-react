@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import githubEvents from './events.js';
 
 class Login extends Component {
   constructor(props) {
@@ -7,7 +6,6 @@ class Login extends Component {
     this.state = {
       input: '',
       showError: false
-
     }
   };
 
@@ -15,29 +13,51 @@ class Login extends Component {
   handleChange = (e) => {
     const input = e.target.value
     this.setState({ input })
-
   }
+
   //on submit send state to app.js
    handleSubmit = (e) => {
     e.preventDefault()
-    console.log(this.state.input)
-    //call function that makes API call
+    //make API calls for user info and events info
     this.getData(this.state.input);
-
+    this.getUserInfo(this.state.input);
   }
 
+  //general error handler function
   handleErrors = (response) => {
     if (!response.ok) {
-      // console.log('there was a problem!!')
         throw Error(response.statusText);
         this.setState({showError: true})
     }
     return response;
   }
 
-  //function to make fetch
+  //function for events endpoint
   getData = (username) => {
-    const url = `https://api.github.com/users/${username}/events?access_token=17e4c766aa5c380d6e9a23faaaa0e3e26a7ba949`;
+    const url = `https://api.github.com/users/${username}/events?access_token=0377bac047ccc37c8398a574a923de7fda196253`;
+    fetch(url).then(this.handleErrors)
+      .then(function(response) {
+      return response.json();
+    })
+    .then(res => {
+      if (res.length === 0) {
+        this.setState({showError: true})
+      } else {
+        const results = res
+        this.setState({showError: false})
+        this.updateForks2(results);
+        this.updatePulls(res);
+        this.props.toggleForm();
+      }
+    }).catch(function(error) {
+        console.log(error);
+    });
+  }
+
+  //call users endpoint and get more info about the user:
+  getUserInfo = (username) => {
+    console.log('getUserInfo was called!')
+    const url = `https://api.github.com/users/${username}?access_token=0377bac047ccc37c8398a574a923de7fda196253`;
     fetch(url).then(this.handleErrors)
       .then(function(response) {
       return response.json();
@@ -46,39 +66,55 @@ class Login extends Component {
       //call updatePulls
       console.log(res)
       if (res.length === 0) {
-        console.log('there are no results to display')
         this.setState({showError: true})
       } else {
-        const results = res
         this.setState({showError: false})
-        this.updateForks(results);
-        this.updatePulls(res);
-        this.props.toggleForm();
-        this.props.addUser(res[0].actor.avatar_url, res[0].actor.display_login);
-
+        const user = {
+          avatar: res.avatar_url,
+          bio: res.bio,
+          name: res.name,
+          location: res.location,
+          login: res.login
+        }
+        this.props.addUser(user);
       }
-
     }).catch(function(error) {
         console.log(error);
-        // alert('there was an issue with your submission!')
     });
-    console.log(username);
-
   }
 
-  updateForks = (apiResponse) => {
-    console.log('apiResonse value', apiResponse);
-    const forkEvents =
-        apiResponse.filter((item) => item.type==="ForkEvent" ).map((item) => (
-              {type: item.type,
-              actor: item.actor,
-              originalRepo: item.repo,
-              forkedRepoURL: item.payload.forkee.html_url,
-              forkedRepoName: item.payload.forkee.name}
-              ))
-      console.log(forkEvents);
-      //send up to app.js
+  // updateForks = (apiResponse) => {
+  //   console.log('apiResonse value', apiResponse);
+  //   const forkEvents =
+  //       apiResponse.filter((item) => item.type==="ForkEvent" ).map((item) => (
+  //             {type: item.type,
+  //             actor: item.actor,
+  //             originalRepo: item.repo,
+  //             forkedRepoURL: item.payload.forkee.html_url,
+  //             forkedRepoName: item.payload.forkee.name}
+  //             ))
+  //     console.log(forkEvents);
+  //     //send up to app.js
+  //     this.props.onUserSubmit(forkEvents, "forkEvents")
+  // }
+
+  //make call for each fork and get data from that call:
+  updateForks2 = (apiResponse) => {
+    const forkEventURLS =
+        apiResponse.filter((item) => item.type==="ForkEvent" )
+        .map((item) => item.payload.forkee.url);
+    Promise.all(forkEventURLS.map(u=>fetch(u))).then(responses =>
+    Promise.all(responses.map(res => res.json()))
+    )
+    .then(results => {
+      const forkEvents = results.map((item) => (
+            {type: 'ForkEvent',
+            originalRepo: item.source.full_name,
+            forkedRepoURL: item.html_url,
+            forkedRepoName: item.name}
+            ))
       this.props.onUserSubmit(forkEvents, "forkEvents")
+    })
   }
 
   updatePulls = (apiResponse) => {
@@ -89,16 +125,13 @@ apiResponse.filter((item) => item.type==="PullRequestEvent" ).map((item, i) => (
        repo: item.repo,
        pullTitle: item.payload.pull_request.title,
        pullURL: item.payload.pull_request.html_url,
-       status: item.payload.pull_request.state}
+       status: item.payload.pull_request.state,
+       merged: item.payload.pull_request.merged}
       ))
-
-      console.log(pullRequests)
-      //send up to app.js
       this.props.onUserSubmit(pullRequests, "pullRequests");
   }
 
 render () {
-
   return (
     <div>
         <form>
@@ -108,7 +141,7 @@ render () {
           </label>
           <input type="submit" onClick={e=>this.handleSubmit(e)}/>
         </form>
-        {this.state.showError ? 'oopsie poopsie! looks like there was an error with your submission' : null}
+        {this.state.showError ? <div>'Sorry, that user does not exist!'</div> : null}
     </div>
   )
 }

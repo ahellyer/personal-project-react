@@ -1,8 +1,8 @@
 import React from 'react';
 
 
-export const Pulls = (props) => (
+export const Pulls = ({ pulls }) => (
   <ul>
-  {props.pulls === undefined || props.pulls.length === 0 ? 'no pulls :(' : props.pulls.map((item, i) => <li key={i}><a href={item.pullURL}>{item.pullTitle} - </a><span>{item.status}</span></li>)}
+  {pulls === undefined || pulls.length === 0 ? 'no pulls :(' : pulls.map((item, i) => <li key={i}><a href={item.pullURL}>{item.pullTitle} - </a><span>{item.status}</span></li>)}
   </ul>
 );

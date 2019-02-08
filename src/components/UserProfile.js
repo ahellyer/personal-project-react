@@ -16,9 +16,3 @@ const UserProfile = (props) => {
 }
 
 export default UserProfile;
-
-//Each of the pull requests should display the title of the pull request as a link, and link to that pull request.
-
-//Each of the pull requests should have, in addition, a visual indicator for whether it is open, closed or merged. This could be colour coded, or just have the status in words next to it.
-
-//each of the pull requests shou
