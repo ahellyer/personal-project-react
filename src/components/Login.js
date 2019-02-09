@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
+import { addUserAction, addPullsAction, addForksAction, addFormToggleAction } from '../redux/actions/action-creators.js';
 
 class Login extends Component {
   constructor(props) {
@@ -18,23 +20,24 @@ class Login extends Component {
   //on submit send state to app.js
    handleSubmit = (e) => {
     e.preventDefault()
-    //make API calls for user info and events info
-    this.getData(this.state.input);
+
     this.getUserInfo(this.state.input);
+    //dispatch user
   }
 
   //general error handler function
   handleErrors = (response) => {
     if (!response.ok) {
-        throw Error(response.statusText);
         this.setState({showError: true})
+        throw Error(response.statusText);
+
     }
     return response;
   }
 
   //function for events endpoint
   getData = (username) => {
-    const url = `https://api.github.com/users/${username}/events?access_token=0377bac047ccc37c8398a574a923de7fda196253`;
+    const url = `https://api.github.com/users/${username}/events`;
     fetch(url).then(this.handleErrors)
       .then(function(response) {
       return response.json();
@@ -47,7 +50,7 @@ class Login extends Component {
         this.setState({showError: false})
         this.updateForks2(results);
         this.updatePulls(res);
-        this.props.toggleForm();
+        this.props.toggleForm(false);
       }
     }).catch(function(error) {
         console.log(error);
@@ -57,7 +60,7 @@ class Login extends Component {
   //call users endpoint and get more info about the user:
   getUserInfo = (username) => {
     console.log('getUserInfo was called!')
-    const url = `https://api.github.com/users/${username}?access_token=0377bac047ccc37c8398a574a923de7fda196253`;
+    const url = `https://api.github.com/users/${username}?access_token=f3cecb9e1ebf49bba2ded16cc6ad972474c21698`;
     fetch(url).then(this.handleErrors)
       .then(function(response) {
       return response.json();
@@ -76,7 +79,10 @@ class Login extends Component {
           location: res.location,
           login: res.login
         }
+        //add user info to state
         this.props.addUser(user);
+        //get user forks and pulls
+        this.getData(this.state.input);
       }
     }).catch(function(error) {
         console.log(error);
@@ -113,7 +119,7 @@ class Login extends Component {
             forkedRepoURL: item.html_url,
             forkedRepoName: item.name}
             ))
-      this.props.onUserSubmit(forkEvents, "forkEvents")
+      this.props.addForks(forkEvents)
     })
   }
 
@@ -128,7 +134,7 @@ apiResponse.filter((item) => item.type==="PullRequestEvent" ).map((item, i) => (
        status: item.payload.pull_request.state,
        merged: item.payload.pull_request.merged}
       ))
-      this.props.onUserSubmit(pullRequests, "pullRequests");
+      this.props.addPulls(pullRequests);
   }
 
 render () {
@@ -145,8 +151,21 @@ render () {
     </div>
   )
 }
-
-
 }
 
-export default Login;
+const mapStateToProps = (store) => {
+  return {
+    store: store
+  };
+}
+
+const mapDispatchToProps = (dispatch) => ({
+  addUser:(user) => dispatch(addUserAction(user)),
+  addPulls:(pulls) => dispatch(addPullsAction(pulls)),
+  addForks:(forks) => dispatch(addForksAction(forks)),
+  toggleForm: (bool) => dispatch(addFormToggleAction(bool))
+})
+
+const ConnectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);
+
+export default ConnectedLogin;
