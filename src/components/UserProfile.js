@@ -2,12 +2,9 @@ import React, { Component} from 'react';
 import { Pulls } from './Pulls';
 import { Forks } from './Forks';
 import { connect } from "react-redux";
-import { addPullsAction, addForksAction } from '../redux/actions/action-creators.js';
+// import { addPullsAction, addForksAction } from '../redux/actions/action-creators.js';
 
 class UserProfile extends Component {
-  constructor(props) {
-    super(props)
-  }
 
   render () {
     console.log(this.props.events)
@@ -33,13 +30,13 @@ class UserProfile extends Component {
        status: item.payload.pull_request.state,
        merged: item.payload.pull_request.merged}
       ))
-
+    console.log(this.props.events);
     return (<div className="user-profile">
       <h2>Pull Requests</h2>
       <Pulls pulls={pullRequests} />
 
       <h2>Fork Events</h2>
-      <Forks forks={forkEvents} />
+      <Forks forks={forkEvents}/>
 
     </div>)
   }

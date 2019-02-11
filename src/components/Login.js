@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { addUserAction, addFormToggleAction, fetchUserAction, fetchEventsAction, clearErrorAction } from '../redux/actions/action-creators.js';
+import { addFormToggleAction, fetchUserAction, fetchEventsAction, clearErrorAction } from '../redux/actions/action-creators.js';
 
 class Login extends Component {
   constructor(props) {

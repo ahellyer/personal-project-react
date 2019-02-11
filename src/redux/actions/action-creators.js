@@ -1,18 +1,17 @@
 import { ADD_USER } from "../constants";
 import { ADD_PULLS } from "../constants";
-import { ADD_FORKS } from "../constants";
+// import { ADD_FORKS } from "../constants";
 import { TOGGLE_FORM } from "../constants";
-import { FETCH_USER } from "../constants";
+// import { FETCH_USER } from "../constants";
 import { ADD_EVENTS } from "../constants";
 import { FETCH_ERROR } from "../constants";
 import { CLEAR_ERROR } from "../constants";
-import { FETCH_FORK } from "../constants";
+// import { FETCH_FORK } from "../constants";
 import { ADD_FORK } from "../constants";
 
 import github from "./../../apis/github";
 import axios from 'axios';
 import { token } from "./../../apis/token";
-
 
 export const addUserAction = (users) => ({
   type: ADD_USER,
