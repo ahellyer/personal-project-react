@@ -6,22 +6,15 @@ import UserDashboard from './components/UserDashboard';
 import { connect } from "react-redux";
 
 class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     input: '',
-  //     // user: {},
-  //     showForm: true,
-  //   };
-  // }
 
   render() {
     console.log(this.props.store)
+    const { user, showForm, allEvents } = this.props;
     return (
       <div>
-        {this.props.showForm ? <Login /> : <UserDashboard user={this.props.store.user}/>}
 
-        <UserProfile pulls={this.props.store.pullRequests} forks={this.props.store.forkEvents}/>
+        {showForm ? <Login /> : <UserDashboard user={user}/> }
+        {allEvents.length > 0 ? <UserProfile /> : null}
 
       </div>
     );
@@ -31,7 +24,9 @@ class App extends Component {
 const mapStateToProps = (store) => {
   return {
     store: store,
-    showForm: store.showForm
+    showForm: store.showForm,
+    allEvents: store.allEvents,
+    user: store.user
   };
 }
 
