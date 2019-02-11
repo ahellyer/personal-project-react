@@ -11,6 +11,8 @@ import { ADD_FORK } from "../constants";
 
 import github from "./../../apis/github";
 import axios from 'axios';
+import { token } from "./../../apis/token";
+
 
 export const addUserAction = (users) => ({
   type: ADD_USER,
@@ -42,8 +44,7 @@ export const addForkBase = (res) => ({
 })
 
 export const fetchUserAction = (username) => {
-  console.log(username);
-  const url = `/users/${username}?access_token=33ea3fc9fb790ad5734c33714a4b5205adb0afb1`
+  const url = `/users/${username}?access_token=${token}`
   return async function(dispatch) {
 
     const response = await github.get(url);
@@ -64,22 +65,16 @@ export const fetchUserAction = (username) => {
 // }
 
 export const fetchEventsAction = (username) => {
-    console.log(username);
-    console.log('in fetch events')
-    const url = `https://api.github.com/users/${username}/events?access_token=33ea3fc9fb790ad5734c33714a4b5205adb0afb1`
+    const url = `https://api.github.com/users/${username}/events?access_token=${token}`
     return function (dispatch) {
-    console.log('events', url)
     axios.get(url)
       .then((res) => dispatch(addEventsAction(res)) , (err)=> dispatch(fetchErrorAction(err)))
   }
 };
 
-
-export const fetchForkBaseAction = (url, id) => {
-  console.log(url, id);
-  console.log('in fetch fork base')
+export const fetchForkBaseAction = (url) => {
   return function (dispatch) {
-  console.log('fork base dispatch', url)
+
   axios.get(url)
     .then((res) => dispatch(addForkBase(res)))
 }

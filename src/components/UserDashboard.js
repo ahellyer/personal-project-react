@@ -1,12 +1,14 @@
 import React from 'react';
 import '../index.css'
 
-const UserDashboard = ({ user }) => {return <div>
-  <p><img className="avatar"src={user.avatar_url}/></p>
-  <h1>Hello, {user.name === null ? 'friend' : user.name}</h1>
-  <p>{user.bio}</p>
-  <p>location: {user.location}</p>
+const UserDashboard = ({ user }) => {return <div className="dashboard">
+    <div className="dashboard-wrapper">
+      <p><img className="avatar"src={user.avatar_url}/></p>
+      <h1>{user.name === null ? user.login : user.name}</h1>
+      {user.bio=== null ? null : <p>{user.bio}</p>}
+      {user.location=== null ? null : <p><i className="fas fa-map-marker-alt"></i> {user.location}</p>}
 
+    </div>
   </div>}
 
 export default UserDashboard;

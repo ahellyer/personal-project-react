@@ -34,7 +34,7 @@ class UserProfile extends Component {
        merged: item.payload.pull_request.merged}
       ))
 
-    return (<div>
+    return (<div className="user-profile">
       <h2>Pull Requests</h2>
       <Pulls pulls={pullRequests} />
 

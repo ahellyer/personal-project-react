@@ -14,11 +14,11 @@ class IndividualFork extends Component {
     }
   render () {
     return (
-      <div>
-        <h1>{this.props.item.forkedRepoName}</h1>
+      <li>
+        <h3><a href={this.props.item.forkedRepoURL}>{this.props.item.forkedRepoName} <i className="fas fa-external-link-alt"></i></a></h3>
         {this.props.forkBase.filter((item) => item.id === this.props.item.id
-        ).map((item) => <p> Base Repo: {item.source.html_url} </p>)}
-      </div>
+        ).map((item) => <a className="base-repo" href={item.source.html_url}> Base Repo: {item.source.html_url} </a>)}
+      </li>
       )
 }
 }

@@ -3,8 +3,8 @@ import IndividualFork from './IndividualFork';
 
 export const Forks = ({ forks }) => (
   <div>
-    <ul>
-    {forks === undefined || forks.length === 0 ? 'No recent fork events' : forks.map((item, i) => <li><IndividualFork key={i} item={item}/></li>)}
+    <ul className="main-list">
+    {forks === undefined || forks.length === 0 ? <p><i className="fas fa-exclamation-circle"></i> No Recent Fork Events</p> : forks.map((item, i) => <IndividualFork key={i} item={item}/>)}
     </ul>
 
   </div>

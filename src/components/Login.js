@@ -28,15 +28,20 @@ class Login extends Component {
 
 render () {
   return (
-    <div>
+    <div className="login">
+      <div className="login-wrapper">
+        <h1>R<i className="fab fa-github"></i>undup</h1>
+
+        <p>Login with your Github username to see a summary of your recent activity.</p>
         <form>
           <label>
-            Enter Your Github username:
-            <input value={this.state.input} onChange={this.handleChange}/>
+            <span className="vh">Enter Your Github username:</span>
+            <input className="user-name" placeholder="username" value={this.state.input} onChange={this.handleChange}/>
           </label>
-          <input type="submit" onClick={e=>this.handleSubmit(e)}/>
+          <input className="form-submit" type="submit" onClick={e=>this.handleSubmit(e)}/>
         </form>
-        {this.props.store.error.length > 0 ? <div>'Sorry, that user does not exist!'</div> : null}
+        {this.props.store.error.length > 0 ? <div>Sorry, that user does not exist!</div> : null}
+      </div>
     </div>
   )
 }
