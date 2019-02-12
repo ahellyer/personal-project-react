@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { addFormToggleAction, fetchUserAction, fetchEventsAction, clearErrorAction } from '../redux/actions/action-creators.js';
+import { onUserSubmit } from '../redux/actions/action-creators.js';
 
 class Login extends Component {
   constructor(props) {
@@ -20,10 +20,7 @@ class Login extends Component {
   //on submit send state to app.js
    handleSubmit = (e) => {
     e.preventDefault()
-    //reset error msg?
-    this.props.clearError()
-    this.props.addUser(this.state.input);
-    this.props.addEvents(this.state.input);
+    this.props.onUserSubmit(this.state.input);
   }
 
 render () {
@@ -31,7 +28,6 @@ render () {
     <div className="login">
       <div className="login-wrapper">
         <h1>R<i className="fab fa-github"></i>undup</h1>
-
         <p>Login with your Github username to see a summary of your recent activity.</p>
         <form>
           <label>
@@ -40,7 +36,7 @@ render () {
           </label>
           <input className="form-submit" type="submit" onClick={e=>this.handleSubmit(e)}/>
         </form>
-        {this.props.store.error.length > 0 ? <div>Sorry, that user does not exist!</div> : null}
+        {this.props.error.length > 0 ? <div>Sorry, that user does not exist!</div> : null}
       </div>
     </div>
   )
@@ -49,15 +45,12 @@ render () {
 
 const mapStateToProps = (store) => {
   return {
-    store: store
+    error: store.error
   };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  clearError: () => dispatch(clearErrorAction()),
-  addUser:(user) => dispatch(fetchUserAction(user)),
-  addEvents:(username) => dispatch(fetchEventsAction(username)),
-  toggleForm: (bool) => dispatch(addFormToggleAction(bool))
+  onUserSubmit: (input) => dispatch(onUserSubmit(input))
 })
 
 const ConnectedLogin = connect(mapStateToProps, mapDispatchToProps)(Login);

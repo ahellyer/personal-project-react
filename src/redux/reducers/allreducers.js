@@ -1,11 +1,4 @@
-import { ADD_USER } from "../constants";
-import { ADD_PULLS } from "../constants";
-import { ADD_FORKS } from "../constants";
-import { TOGGLE_FORM } from "../constants";
-import { ADD_EVENTS } from "../constants";
-import { FETCH_ERROR } from "../constants";
-import { CLEAR_ERROR } from "../constants";
-import { ADD_FORK} from "../constants";
+import CONSTANTS from "../constants";
 
 const initialState = {
   user: {},
@@ -15,46 +8,40 @@ const initialState = {
   forkBase: []
 }
 
-// reducer
 const user = (store = initialState, action) => {
   switch (action.type) {
-    case ADD_USER:
+    case CONSTANTS.ADD_USER:
       return {
         ...store,
         user: action.payload
       }
-    case ADD_EVENTS:
+    case CONSTANTS.ADD_EVENTS:
       return {
         ...store,
         allEvents: action.payload,
         showForm: false
       }
-    case ADD_PULLS:
+    case CONSTANTS.ADD_PULLS:
       return {
         ...store,
         pullRequests: action.payload
       }
-    case ADD_FORKS:
+    case CONSTANTS.ADD_FORKS:
       return {
         ...store,
         forkEvents: action.payload
       }
-    case TOGGLE_FORM:
-      return {
-        ...store,
-        showForm: action.payload
-      }
-    case FETCH_ERROR:
+    case CONSTANTS.FETCH_ERROR:
       return {
         ...store,
         error: 'there was an error'
       }
-    case CLEAR_ERROR:
+    case CONSTANTS.CLEAR_ERROR:
       return {
         ...store,
         error: ''
       }
-    case ADD_FORK:
+    case CONSTANTS.ADD_FORK:
       return {
       ...store,
       forkBase: store.forkBase.concat(action.payload.data)

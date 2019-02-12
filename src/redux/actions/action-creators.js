@@ -1,46 +1,44 @@
-import { ADD_USER } from "../constants";
-import { ADD_PULLS } from "../constants";
-// import { ADD_FORKS } from "../constants";
-import { TOGGLE_FORM } from "../constants";
-// import { FETCH_USER } from "../constants";
-import { ADD_EVENTS } from "../constants";
-import { FETCH_ERROR } from "../constants";
-import { CLEAR_ERROR } from "../constants";
-// import { FETCH_FORK } from "../constants";
-import { ADD_FORK } from "../constants";
-
+import CONSTANTS from "../constants";
 import github from "./../../apis/github";
 import axios from 'axios';
 import { token } from "./../../apis/token";
 
 export const addUserAction = (users) => ({
-  type: ADD_USER,
+  type: CONSTANTS.ADD_USER,
   payload:users
 })
 
 export const clearErrorAction = () => ({
-  type: CLEAR_ERROR,
+  type: CONSTANTS.CLEAR_ERROR,
 })
 
 export const addEventsAction = (events) => ({
-  type: ADD_EVENTS,
+  type: CONSTANTS.ADD_EVENTS,
   payload: events.data
 })
 
 export const addPullsAction = (pulls) => ({
-  type: ADD_PULLS,
+  type: CONSTANTS.ADD_PULLS,
   payload: pulls
 })
 
 export const fetchErrorAction = (error) => ({
-  type: FETCH_ERROR,
+  type: CONSTANTS.FETCH_ERROR,
   payload: error
 })
 
 export const addForkBase = (res) => ({
-  type: ADD_FORK,
+  type: CONSTANTS.ADD_FORK,
   payload: res
 })
+
+export const onUserSubmit = (user) => {
+  return function(dispatch) {
+    dispatch(clearErrorAction())
+    dispatch(fetchUserAction(user))
+    dispatch(fetchEventsAction(user))
+  }
+}
 
 export const fetchUserAction = (username) => {
   const url = `/users/${username}?access_token=${token}`
@@ -51,17 +49,6 @@ export const fetchUserAction = (username) => {
     dispatch(addUserAction(response.data), (err)=> dispatch(fetchErrorAction(err)))
   }
 }
-
-// export const fetchEventsAction = (username) => {
-//   console.log(username);
-//   const url = `/users/${username}/events`
-//   return async function(dispatch) {
-//
-//     const response = await github.get(url);
-//     console.log(response);
-//     dispatch(addEventsAction(response))
-//   }
-// }
 
 export const fetchEventsAction = (username) => {
     const url = `https://api.github.com/users/${username}/events?access_token=${token}`
@@ -78,8 +65,3 @@ export const fetchForkBaseAction = (url) => {
     .then((res) => dispatch(addForkBase(res)))
 }
 }
-
-export const addFormToggleAction = (showForm) => ({
-  type: TOGGLE_FORM,
-  payload: showForm
-})

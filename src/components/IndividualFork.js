@@ -3,19 +3,22 @@ import { connect } from "react-redux";
 import { fetchForkBaseAction } from '../redux/actions/action-creators.js';
 
 class IndividualFork extends Component {
-  
+  filterFork = forks => forks.filter(fork => fork.id === this.props.item.id);
 
   componentDidMount =() => {
-    console.log(this.props.item.forkedRepoFetchURL);
-    //dispatch call based on fork url
     this.props.fetchForkBase(this.props.item.forkedRepoFetchURL);
     }
+
   render () {
+    const filteredForks = this.filterFork(this.props.forkBase);
+
     return (
       <li>
-        <h3><a href={this.props.item.forkedRepoURL}>{this.props.item.forkedRepoName} <i className="fas fa-external-link-alt"></i></a></h3>
-        {this.props.forkBase.filter((item) => item.id === this.props.item.id
-        ).map((item, i) => <a key={i} className="base-repo" href={item.source.html_url}> Base Repo: {item.source.html_url} </a>)}
+        <h3>
+          <a href={this.props.item.forkedRepoURL}>{this.props.item.forkedRepoName} <i className="fas fa-external-link-alt"></i>
+          </a>
+        </h3>
+        {filteredForks.map((item, i) => <a key={i} className="base-repo" href={item.source.html_url}> Base Repo: {item.source.html_url} </a>)}
       </li>
       )
 }

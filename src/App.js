@@ -1,25 +1,20 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Login from './components/Login'
 import UserProfile from './components/UserProfile';
 import UserDashboard from './components/UserDashboard';
 
 import { connect } from "react-redux";
 
-class App extends Component {
+const App = ({ user, showForm, allEvents }) => {
 
-  render() {
-    console.log(this.props.store)
-    const { user, showForm, allEvents } = this.props;
-    return (
+  return (
       <div>
-
         {showForm ? <Login /> : <UserDashboard user={user}/> }
         {allEvents.length > 0 ? <UserProfile /> : null}
-
       </div>
-    );
-  }
+    )
 }
+
 
 const mapStateToProps = (store) => {
   return {
