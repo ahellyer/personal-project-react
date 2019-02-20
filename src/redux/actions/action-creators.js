@@ -1,7 +1,7 @@
 import CONSTANTS from "../constants";
 import github from "./../../apis/github";
 import axios from 'axios';
-import { token } from "./../../apis/token";
+// import { token } from "./../../apis/token";
 
 export const addUserAction = (users) => ({
   type: CONSTANTS.ADD_USER,
@@ -41,7 +41,7 @@ export const onUserSubmit = (user) => {
 }
 
 export const fetchUserAction = (username) => {
-  const url = `/users/${username}?access_token=${token}`
+  const url = `/users/${username}`
   return async function(dispatch) {
 
     const response = await github.get(url);
@@ -51,7 +51,7 @@ export const fetchUserAction = (username) => {
 }
 
 export const fetchEventsAction = (username) => {
-    const url = `https://api.github.com/users/${username}/events?access_token=${token}`
+    const url = `https://api.github.com/users/${username}/events`
     return function (dispatch) {
     axios.get(url)
       .then((res) => dispatch(addEventsAction(res)) , (err)=> dispatch(fetchErrorAction(err)))
